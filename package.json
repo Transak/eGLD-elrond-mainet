@@ -1,13 +1,13 @@
 {
   "name": "@transak/egld-elrond-mainnet",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
     "test": "npm-run-all -p -r ganache truffle-test --aggregate-output",
-    "publish": "npm publish --access restricted"
+    "restricted-publish": "npm publish --access restricted"
   },
   "keywords": [],
   "author": "",

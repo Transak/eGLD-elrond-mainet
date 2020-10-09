@@ -23,7 +23,7 @@ function getTransactionLink(txId, network) {
     return networkDetails.transactionLink(txId);
 }
 
-function getWalletLink(txId, walletAddress) {
+function getWalletLink(walletAddress, network) {
     let networkDetails = config.networks.testnet;
     if (network === 'main') networkDetails = config.networks.main;
     return networkDetails.walletLink(walletAddress);
