@@ -67,6 +67,12 @@ describe("eGLD-elrond-mainet module", () => {
         expect(typeof result === "number");
     });
 
+    it("should isValidWalletAddress", async function () {
+        this.timeout(mainTimeout * 3);
+        const result = await elrondLib.isValidWalletAddress(testData.toWalletAddress, testData.network);
+        expect(result === true);
+    });
+
     it("should sendTransaction", async function () {
         this.timeout(mainTimeout * 3);
         const {

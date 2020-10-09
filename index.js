@@ -45,6 +45,19 @@ async function getBalance(address, network) {
     }
 }
 
+async function isValidWalletAddress(address, network) {
+    try {
+        let networkDetails = config.networks.testnet;
+        if (network === 'main') networkDetails = config.networks.main;
+        const provider = new ProxyProvider(networkDetails.provider);
+        address = new Address(address);
+        if (!address) return false;
+        else return true;
+    } catch (e) {
+        return false;
+    }
+}
+
 async function getTransaction(hash, network) {
     let response = false;
     try {
@@ -148,6 +161,7 @@ module.exports = {
     getTransactionLink,
     getWalletLink,
     getTransaction,
+    isValidWalletAddress,
     sendTransaction,
     getBalance,
 };
