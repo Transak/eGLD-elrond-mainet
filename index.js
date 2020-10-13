@@ -1,6 +1,7 @@
 const config = require('./config');
 const BigNumber = require('bignumber.js');
 const {ProxyProvider, SimpleSigner, Account, GasLimit, TransactionHash, TransactionPayload, NetworkConfig, Transaction, Address, Balance} = require("@elrondnetwork/erdjs");
+const timeOut = 20000;
 
 const _toDecimal = (amount, decimals) => {
     return new BigNumber(amount).div(`1e${decimals}`).toString(10);
@@ -33,7 +34,7 @@ async function getBalance(address, network) {
     try {
         let networkDetails = config.networks.testnet;
         if (network === 'main') networkDetails = config.networks.main;
-        const provider = new ProxyProvider(networkDetails.provider);
+        const provider = new ProxyProvider(networkDetails.provider, timeOut);
         address = new Address(address);
         const balance = await provider.getBalance(address)
         const rawBalance = balance.raw();
@@ -49,7 +50,7 @@ async function isValidWalletAddress(address, network) {
     try {
         let networkDetails = config.networks.testnet;
         if (network === 'main') networkDetails = config.networks.main;
-        const provider = new ProxyProvider(networkDetails.provider);
+        const provider = new ProxyProvider(networkDetails.provider, timeOut);
         address = new Address(address);
         if (!address) return false;
         else return true;
@@ -65,7 +66,7 @@ async function getTransaction(hash, network) {
             let networkDetails = config.networks.testnet;
             if (network === 'main') networkDetails = config.networks.main;
 
-            const provider = new ProxyProvider(networkDetails.provider);
+            const provider = new ProxyProvider(networkDetails.provider, timeOut);
             const txnHash = new TransactionHash(hash);
             const transaction = await provider.getTransaction(txnHash);
 
@@ -84,6 +85,8 @@ async function getTransaction(hash, network) {
                         amount: Number(_toDecimal(transaction.value.raw(), 18)),
                         isExecuted: transaction.status.isExecuted(),
                         isSuccessful: transaction.status.isSuccessful(),
+                        isInvalid: transaction.status.isInvalid(),
+                        isPending: transaction.status.isPending(),
                         from: transaction.sender.bech32(),
                         to: transaction.receiver.bech32(),
                         nonce: transaction.nonce.value
@@ -93,7 +96,7 @@ async function getTransaction(hash, network) {
         }
         return response
     } catch (e) {
-        console.error(e)
+        // throw(e.message)
     }
 }
 
@@ -104,7 +107,7 @@ async function sendTransaction({to, amount, network, keyStore, password}) {
         if (network === 'main') networkDetails = config.networks.main;
 
         //Set provider
-        const provider = new ProxyProvider(networkDetails.provider);
+        const provider = new ProxyProvider(networkDetails.provider, timeOut);
         NetworkConfig.getDefault().sync(provider);
 
         //get signer data using key
