@@ -110,7 +110,7 @@ async function sendTransaction({to, amount, network, keyStore, password}) {
 
         //Set provider
         const provider = new ProxyProvider(networkDetails.provider, timeOut);
-        NetworkConfig.getDefault().sync(provider);
+        await NetworkConfig.getDefault().sync(provider);
 
         //get signer data using key
         const signer = _createSigner(keyStore, password);
