@@ -1,16 +1,16 @@
 const elrondLib = require('../index');
 const {expect, assert} = require('chai');
-
+require("dotenv").config({path: `${__dirname}/.env`})
 /*
 invalid chain id
  */
 // variables
 const mainTimeout = 14000;
 const testData = {
-    toWalletAddress: 'erd1qr5exrfd6nvw9cwrg5av337e6zjzylf95yg00mnz9tlqjmugjy4qskprl9',
-    network: 'main',
-    keyStore: ``,
-    password: '',
+    toWalletAddress: process.env.TOWALLETADDRESS,
+    network: process.env.NETWORK,
+    keyStore: process.env.KEYSTORE,
+    password: process.env.PASSWORD,
     amount: 0.00005
 };
 

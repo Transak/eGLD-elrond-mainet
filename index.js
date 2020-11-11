@@ -12,8 +12,10 @@ const _createSigner = (keyStore, password) => {
     try {
         const keyFileObject = JSON.parse(keyStore);
         const signer = BackendSigner.fromWalletKey(keyFileObject, password);
+
         return signer;
     } catch (e) {
+        console.error(e)
         throw new Error('Invalid keyStore or password')
     }
 }
