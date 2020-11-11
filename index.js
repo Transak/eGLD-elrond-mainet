@@ -1,6 +1,6 @@
 const config = require('./config');
 const BigNumber = require('bignumber.js');
-const {ProxyProvider, SimpleSigner, Account, GasLimit, TransactionHash, TransactionPayload, NetworkConfig, Transaction, Address, Balance} = require("@elrondnetwork/erdjs");
+const {ProxyProvider, BackendSigner, Account, GasLimit, TransactionHash, TransactionPayload, NetworkConfig, Transaction, Address, Balance} = require("@elrondnetwork/erdjs");
 const timeOut = 20000;
 
 const _toDecimal = (amount, decimals) => {
@@ -11,7 +11,7 @@ const _createSigner = (keyStore, password) => {
     if (!password) throw new Error('password is undefined')
     try {
         const keyFileObject = JSON.parse(keyStore);
-        const signer = SimpleSigner.fromWalletKey(keyFileObject, password);
+        const signer = BackendSigner.fromWalletKey(keyFileObject, password);
         return signer;
     } catch (e) {
         throw new Error('Invalid keyStore or password')
@@ -36,7 +36,8 @@ async function getBalance(address, network) {
         if (network === 'main') networkDetails = config.networks.main;
         const provider = new ProxyProvider(networkDetails.provider, timeOut);
         address = new Address(address);
-        const balance = await provider.getBalance(address)
+        const account = await provider.getAccount(address);
+        const balance = account.balance;
         const rawBalance = balance.raw();
         if (rawBalance) return Number(_toDecimal(rawBalance, 18));
         else return 0;
@@ -85,6 +86,7 @@ async function getTransaction(hash, network) {
                         amount: Number(_toDecimal(transaction.value.raw(), 18)),
                         isExecuted: transaction.status.isExecuted(),
                         isSuccessful: transaction.status.isSuccessful(),
+                        isFailed: transaction.status.isFailed(),
                         isInvalid: transaction.status.isInvalid(),
                         isPending: transaction.status.isPending(),
                         from: transaction.sender.bech32(),
@@ -108,7 +110,7 @@ async function sendTransaction({to, amount, network, keyStore, password}) {
 
         //Set provider
         const provider = new ProxyProvider(networkDetails.provider, timeOut);
-        NetworkConfig.getDefault().sync(provider);
+        await NetworkConfig.getDefault().sync(provider);
 
         //get signer data using key
         const signer = _createSigner(keyStore, password);
