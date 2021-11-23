@@ -45,7 +45,7 @@ async function getBalance(address, network) {
         else return 0;
     } catch (e) {
         console.error(e)
-        return 0;
+        return false;
     }
 }
 
