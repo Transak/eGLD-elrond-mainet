@@ -1,6 +1,6 @@
 {
   "name": "@transak/egld-elrond-mainnet",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@elrondnetwork/erdjs": "^1.0.8",
+    "@elrondnetwork/erdjs": "1.0.8",
     "bignumber.js": "^9.0.1",
     "chai": "^4.2.0",
     "dotenv": "^8.2.0"
