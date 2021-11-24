@@ -72,7 +72,7 @@ async function getTransaction(hash, network) {
             const provider = new ProxyProvider(networkDetails.provider, timeOut);
             const txnHash = new TransactionHash(hash);
             const transaction = await provider.getTransaction(txnHash);
-
+            transaction.value = Number(_toDecimal(transaction.value.raw(), 18))
             if (transaction) {
                 response = {
                     transactionData: transaction,
@@ -85,7 +85,7 @@ async function getTransaction(hash, network) {
                         gasLimit: transaction.gasLimit.value,
                         gasCostInCrypto: Number(_toDecimal((transaction.gasPrice.value * transaction.gasLimit.value), 18)),
                         gasCostCryptoCurrency: 'EGLD',
-                        amount: Number(_toDecimal(transaction.value.raw(), 18)),
+                        amount: transaction.value,
                         isExecuted: transaction.status.isExecuted(),
                         isSuccessful: transaction.status.isSuccessful(),
                         isFailed: transaction.status.isFailed(),
@@ -100,6 +100,7 @@ async function getTransaction(hash, network) {
         }
         return response
     } catch (e) {
+        console.log(e)
         // throw(e.message)
     }
 }
