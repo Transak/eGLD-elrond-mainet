@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@elrondnetwork/erdjs": "1.0.8",
+    "@elrondnetwork/erdjs": "^8.0.1-alpha.13",
     "bignumber.js": "^9.0.1",
     "chai": "^4.2.0",
     "dotenv": "^8.2.0"

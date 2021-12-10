@@ -1,6 +1,6 @@
 const config = require('./config');
 const BigNumber = require('bignumber.js');
-const {ProxyProvider, BackendSigner, Account, GasLimit, TransactionHash, TransactionPayload, NetworkConfig, Transaction, Address, Balance} = require("@elrondnetwork/erdjs");
+const {ProxyProvider, UserSigner, Account, GasLimit, TransactionHash, TransactionPayload, NetworkConfig, Transaction, Address, Balance} = require("@elrondnetwork/erdjs");
 const timeOut = 20000;
 
 const _toDecimal = (amount, decimals) => {
@@ -11,7 +11,7 @@ const _createSigner = (keyStore, password) => {
     if (!password) throw new Error('password is undefined')
     try {
         const keyFileObject = JSON.parse(keyStore);
-        const signer = BackendSigner.fromWalletKey(keyFileObject, password);
+        const signer = UserSigner.fromWallet(keyFileObject, password);
 
         return signer;
     } catch (e) {
@@ -39,10 +39,8 @@ async function getBalance(address, network) {
         const provider = new ProxyProvider(networkDetails.provider, timeOut);
         address = new Address(address);
         const account = await provider.getAccount(address);
-        const balance = account.balance;
-        const rawBalance = balance.raw();
+        const rawBalance = account.balance;
         if (rawBalance) return Number(_toDecimal(rawBalance, 18));
-        else return 0;
     } catch (e) {
         console.error(e)
         return false;
@@ -72,7 +70,7 @@ async function getTransaction(hash, network) {
             const provider = new ProxyProvider(networkDetails.provider, timeOut);
             const txnHash = new TransactionHash(hash);
             const transaction = await provider.getTransaction(txnHash);
-            transaction.value = Number(_toDecimal(transaction.value.raw(), 18))
+            transaction.value = Number(_toDecimal(transaction.value, 18))
             if (transaction) {
                 response = {
                     transactionData: transaction,
@@ -131,13 +129,13 @@ async function sendTransaction({to, amount, network, keyStore, password}) {
         await sender.sync(provider);
 
         //Check balance
-        const currentBalance = Number(_toDecimal(sender.balance.raw(), 18));
+        const currentBalance = Number(_toDecimal(sender.balance, 18));
         if (currentBalance < amount) throw new Error('Insufficient balance in eGLD wallet')
 
         //Set transaction config
         const nonce = sender.nonce;
         const receiver = new Address(to);
-        const value = Balance.eGLD(amount);
+        const value =  Balance.egld(amount);
         const payload = new TransactionPayload("");
         const gasLimit = GasLimit.forTransfer(payload);
 
@@ -163,7 +161,7 @@ async function sendTransaction({to, amount, network, keyStore, password}) {
                 gasLimit: transaction.gasLimit.value,
                 gasCostInCrypto: Number(_toDecimal((transaction.gasPrice.value * transaction.gasLimit.value), 18)),
                 gasCostCryptoCurrency: 'EGLD',
-                amount: Number(_toDecimal(transaction.value.raw(), 18)),
+                amount: Number(_toDecimal(transaction.value, 18)),
                 from: transaction.sender.bech32(),
                 to: transaction.receiver.bech32(),
                 nonce: transaction.nonce.value
