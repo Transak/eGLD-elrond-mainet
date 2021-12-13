@@ -69,14 +69,16 @@ async function getTransaction(hash, network) {
 
             const provider = new ProxyProvider(networkDetails.provider, timeOut);
             const txnHash = new TransactionHash(hash);
+            const txHashString = txnHash.toString()
             const transaction = await provider.getTransaction(txnHash);
+
             transaction.value = Number(_toDecimal(transaction.value, 18))
             if (transaction) {
                 response = {
                     transactionData: transaction,
                     date: new Date(),
-                    transactionHash: hash,
-                    transactionLink: networkDetails.transactionLink(hash),
+                    transactionHash: txHashString,
+                    transactionLink: networkDetails.transactionLink(txHashString),
                     network: networkDetails.networkName,
                     gasPrice: transaction.gasPrice.value,
                     amount: transaction.value,
@@ -87,8 +89,8 @@ async function getTransaction(hash, network) {
                     feeCurrency: 'EGLD',
                     receipt: {
                         date: new Date(),
-                        transactionHash: hash,
-                        transactionLink: networkDetails.transactionLink(hash),
+                        transactionHash: txHashString,
+                        transactionLink: networkDetails.transactionLink(txHashString),
                         network: networkDetails.networkName,
                         gasPrice: transaction.gasPrice.value,
                         gasLimit: transaction.gasLimit.value,
@@ -154,8 +156,8 @@ async function sendTransaction({to, amount, network, keyStore, password}) {
             transactionData: transaction,
             receipt: {
                 date: new Date(),
-                transactionHash: transaction.hash.hash,
-                transactionLink: networkDetails.transactionLink(transaction.hash.hash),
+                transactionHash: transaction.hash.toString(),
+                transactionLink: networkDetails.transactionLink(transaction.hash.toString()),
                 network: networkDetails.networkName,
                 gasPrice: transaction.gasPrice.value,
                 gasLimit: transaction.gasLimit.value,

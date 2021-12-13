@@ -13,7 +13,6 @@ const testData = {
     password: process.env.PASSWORD,
     amount: 0.00005
 };
-
 if (!testData.keyStore || !testData.password) throw new Error('Invalid keyStore or password')
 
 const runtime = {};
