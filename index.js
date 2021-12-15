@@ -1,7 +1,7 @@
 const config = require('./config');
 const BigNumber = require('bignumber.js');
 const {ProxyProvider, UserSigner, Account, GasLimit, TransactionHash, TransactionPayload, NetworkConfig, Transaction, Address, Balance} = require("@elrondnetwork/erdjs");
-const timeOut = 20000;
+const timeout = 20000;
 
 const _toDecimal = (amount, decimals) => {
     return new BigNumber(amount).div(`1e${decimals}`).toString(10);
@@ -36,7 +36,7 @@ async function getBalance(address, network) {
     try {
         let networkDetails = config.networks.testnet;
         if (network === 'main') networkDetails = config.networks.main;
-        const provider = new ProxyProvider(networkDetails.provider, timeOut);
+        const provider = new ProxyProvider(networkDetails.provider, {timeout});
         address = new Address(address);
         const account = await provider.getAccount(address);
         const rawBalance = account.balance;
@@ -51,7 +51,7 @@ async function isValidWalletAddress(address, network) {
     try {
         let networkDetails = config.networks.testnet;
         if (network === 'main') networkDetails = config.networks.main;
-        const provider = new ProxyProvider(networkDetails.provider, timeOut);
+        const provider = new ProxyProvider(networkDetails.provider, {timeout});
         address = new Address(address);
         if (!address) return false;
         else return true;
@@ -67,7 +67,7 @@ async function getTransaction(hash, network) {
             let networkDetails = config.networks.testnet;
             if (network === 'main') networkDetails = config.networks.main;
 
-            const provider = new ProxyProvider(networkDetails.provider, timeOut);
+            const provider = new ProxyProvider(networkDetails.provider, {timeout});
             const txnHash = new TransactionHash(hash);
             const txHashString = txnHash.toString()
             const transaction = await provider.getTransaction(txnHash);
@@ -122,7 +122,7 @@ async function sendTransaction({to, amount, network, keyStore, password}) {
         if (network === 'main') networkDetails = config.networks.main;
 
         //Set provider
-        const provider = new ProxyProvider(networkDetails.provider, timeOut);
+        const provider = new ProxyProvider(networkDetails.provider, {timeout});
         await NetworkConfig.getDefault().sync(provider);
 
         //get signer data using key
