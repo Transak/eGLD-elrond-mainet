@@ -13,7 +13,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@elrondnetwork/erdjs": "^8.0.1-alpha.13",
+    "@elrondnetwork/erdjs": "^10.2.5",
+    "@elrondnetwork/erdjs-network-providers": "^0.1.5",
+    "@elrondnetwork/erdjs-walletcore": "^1.0.0",
     "bignumber.js": "^9.0.1",
     "chai": "^4.2.0",
     "dotenv": "^8.2.0"
