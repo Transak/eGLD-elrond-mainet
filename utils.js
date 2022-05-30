@@ -13,7 +13,7 @@ const consoleError = ({ message, err, tags }) => {
         blockchain: "elrond",
         ...(tags || {}),
     };
-    console.log(error);
+    console.error(error);
 };
 
 const _toDecimal = (amount, decimals) => {
