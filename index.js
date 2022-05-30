@@ -1,9 +1,9 @@
 const config = require('./config');
-const { Address, Transaction, Account, TransactionHash, TransactionWatcher } = require("@elrondnetwork/erdjs");
+const { Address, Transaction, Account, TransactionHash } = require("@elrondnetwork/erdjs");
 const { ProxyNetworkProvider } = require("@elrondnetwork/erdjs-network-providers");
 const timeout = 20000;
 const _ = require('lodash');
-const {consoleError, _toDecimal, _createSigner, _getTokenTransferred, _getPayload,sleep} = require("./utils");
+const {consoleError, _toDecimal, _createSigner, _getTokenTransferred, _getPayload} = require("./utils");
 const {getTransactionLinkParams ,getWalletLinkParams, getBalanceParams, getTransactionParams, sendTransactionParams} = require("./validator");
 
 function getTransactionLink(txId, network) {
@@ -82,8 +82,7 @@ async function isValidWalletAddress(walletAddress, network) {
     try {
         let networkDetails = config.networks.testnet;
         if (network === 'main') networkDetails = config.networks.main;
-        const provider = new ProxyNetworkProvider(networkDetails.provider, {timeout});
-        address = new Address(address);
+        address = new Address(walletAddress);
         if (!address) return false;
         else return true;
     } catch (e) {

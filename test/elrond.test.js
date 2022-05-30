@@ -1,5 +1,5 @@
 const elrondLib = require("../index");
-const { expect, assert } = require("chai");
+const { assert } = require("chai");
 require("dotenv").config({ path: `${__dirname}/.env` });
 /*
 invalid chain id
@@ -43,32 +43,23 @@ const keys = {
     ],
 };
 
-// validate object by all it's keys
-const allKeys = (result, keys) => {
-    for (let key in keys) {
-        expect(result).to.have.property(keys[key].name);
-    }
-};
-
 describe("eGLD-elrond-mainet module", () => {
     it("should getBalance egld", async function() {
         this.timeout(mainTimeout * 3);
         const result = await elrondLib.getBalance(testData.toWalletAddress, testData.network);
-        console.log({ balance: result });
-        expect(typeof result === "number");
+        assert(typeof result === "number", "result should be a number");
     });
 
     it("should getBalance esdt", async function() {
         this.timeout(mainTimeout * 3);
         const result = await elrondLib.getBalance(testData.toWalletAddress, testData.network, {tokenIdentifier: testData.identifier, decimals:testData.decimals_ESDT});
-        console.log({ balance: result });
-        expect(typeof result === "number");
+        assert(typeof result === "number", "result should be a number");
     });
 
     it("should isValidWalletAddress", async function() {
         this.timeout(mainTimeout * 3);
         const result = await elrondLib.isValidWalletAddress(testData.toWalletAddress, testData.network);
-        expect(result === true);
+        assert(result=== true && typeof result === "boolean", "result should be true");
     });
 
     it("should sendTransaction", async function() {
@@ -82,14 +73,12 @@ describe("eGLD-elrond-mainet module", () => {
             keyStore,
             password,
         });
-        console.log(result);
         assert.hasAllKeys(result.receipt, keys.sendTransaction);
         runtime.transactionHash = result.receipt.transactionHash;
     });
 
     it("should getTransaction", async function() {
         this.timeout(mainTimeout * 3);
-        console.log("NORMAl \n \n");
         const { network } = testData;
         const result = await elrondLib.getTransaction(runtime.transactionHash, network);
         assert.hasAllKeys(result.receipt, keys.getTransaction);
@@ -108,21 +97,14 @@ describe("eGLD-elrond-mainet module", () => {
             tokenIdentifier: identifier,
             decimals: decimals_ESDT,
         });
-        console.log(result);
         assert.hasAllKeys(result.receipt, keys.sendTransaction);
         runtime.transactionHashEsdt = result.receipt.transactionHash;
     });
 
     it("should getTransaction ESDT", async function() {
         this.timeout(mainTimeout * 3);
-        console.log("ESDT \n\n");
         const { network } = testData;
         const result = await elrondLib.getTransaction(runtime.transactionHashEsdt, network);
-        console.log(result);
-        // console.log("contractResults")
-        // console.log(result.transactionData.contractResults)
-        // console.log("logs")
-        // console.log(result.transactionData.logs.events[0])
         assert.hasAllKeys(result.receipt, keys.getTransaction);
     });
 });
