@@ -1,17 +1,16 @@
 module.exports = {
-    networks : {
+    networks: {
         main: {
-            provider: 'https://gateway.elrond.com',
-            transactionLink : (hash) => `https://explorer.elrond.com/transactions/${hash}`,
-            walletLink : (address) => `https://explorer.elrond.com/address/${address}`,
-            networkName: 'main',
-
+            provider: "https://gateway.multiversx.com",
+            transactionLink: (hash) => `https://explorer.multiversx.com/transactions/${hash}`,
+            walletLink: (address) => `https://explorer.multiversex.com/address/${address}`,
+            networkName: "main",
         },
         testnet: {
-            provider: 'https://testnet-gateway.elrond.com',
-            transactionLink : (hash) => `https://testnet-explorer.elrond.com/transactions/${hash}`,
-            walletLink : (address) => `https://testnet-explorer.elrond.com/address/${address}`,
-            networkName: 'testnet',
-        }
-    }
-}
+            provider: "https://testnet-gateway.multiversx.com",
+            transactionLink: (hash) => `https://testnet-explorer.multiversex.com/transactions/${hash}`,
+            walletLink: (address) => `https://testnet-explorer.multiversx.com/address/${address}`,
+            networkName: "testnet",
+        },
+    },
+};
