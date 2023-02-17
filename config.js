@@ -3,12 +3,12 @@ module.exports = {
         main: {
             provider: "https://gateway.multiversx.com",
             transactionLink: (hash) => `https://explorer.multiversx.com/transactions/${hash}`,
-            walletLink: (address) => `https://explorer.multiversex.com/address/${address}`,
+            walletLink: (address) => `https://explorer.multiversx.com/address/${address}`,
             networkName: "main",
         },
         testnet: {
             provider: "https://testnet-gateway.multiversx.com",
-            transactionLink: (hash) => `https://testnet-explorer.multiversex.com/transactions/${hash}`,
+            transactionLink: (hash) => `https://testnet-explorer.multiversx.com/transactions/${hash}`,
             walletLink: (address) => `https://testnet-explorer.multiversx.com/address/${address}`,
             networkName: "testnet",
         },
