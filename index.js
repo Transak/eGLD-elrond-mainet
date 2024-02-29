@@ -232,6 +232,30 @@ async function sendTransaction({to, amount, network, keyStore, password, tokenId
     }
 }
 
+
+async function getGasCost({ network, amount, tokenIdentifier, decimals }) {
+    const { payload, payment, gasLimit } = _getPayload({
+      identifier: tokenIdentifier,
+      amount,
+      decimals,
+    });
+  
+    let networkDetails = config.networks.testnet;
+    if (network === "main") networkDetails = config.networks.main;
+    const provider = new ProxyNetworkProvider(networkDetails.provider, {
+      timeout,
+    });
+    const networkConfig = await provider.getNetworkConfig();
+  
+    return {
+      gasLimit,
+      gasCostInCrypto: Number(
+        _toDecimal(gasLimit * networkConfig.MinGasPrice, decimals)
+      ),
+      gasCostCryptoCurrency: "EGLD",
+    };
+  }
+
 module.exports = {
     getTransactionLink,
     getWalletLink,
@@ -239,4 +263,5 @@ module.exports = {
     isValidWalletAddress,
     sendTransaction,
     getBalance,
+    getGasCost
 };
