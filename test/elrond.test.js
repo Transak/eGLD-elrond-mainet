@@ -15,7 +15,7 @@ const testData = {
     identifier: "ZPAY-eb1ced",
     decimals_ESDT: 18,
 };
-if (!testData.keyStore || !testData.password) throw new Error("Invalid keyStore or password");
+// if (!testData.keyStore || !testData.password) throw new Error("Invalid keyStore or password");
 
 const runtime = {};
 
@@ -107,4 +107,17 @@ describe("eGLD-elrond-mainet module", () => {
         const result = await elrondLib.getTransaction(runtime.transactionHashEsdt, network);
         assert.hasAllKeys(result.receipt, keys.getTransaction);
     });
+
+    it("should get GasEstimate", async function () {
+        this.timeout(mainTimeout * 3);
+        const { network, amount, identifier, decimals_ESDT: decimals } = testData;
+        const result = await elrondLib.getGasCost({
+          amount,
+          network,
+          decimals,
+          tokenIdentifier: identifier,
+        });
+        console.log(result)
+        assert(typeof result.gasCostInCrypto === "number", "gasCostInCrypto should be a number");
+      });
 });
