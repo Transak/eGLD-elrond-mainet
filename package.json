@@ -1,6 +1,6 @@
 {
   "name": "@transak/egld-elrond-mainnet",
-  "version": "1.0.15",
+  "version": "1.1.0",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -19,7 +19,8 @@
     "bignumber.js": "9.0.1",
     "chai": "4.2.0",
     "dotenv": "8.2.0",
-    "joi": "17.6.0"
+    "joi": "17.6.0",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "chai": "4.2.0",
